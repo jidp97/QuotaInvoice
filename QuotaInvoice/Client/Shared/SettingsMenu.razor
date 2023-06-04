@@ -1,0 +1,19 @@
+﻿@if (logIn) {
+    <MudTooltip Text="José Ismael">
+        <MudMenu>
+            <ActivatorContent>
+                <Avatar/>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem>Profile</MudMenuItem>
+                <MudMenuItem>Theme</MudMenuItem>
+                <MudMenuItem>Usage</MudMenuItem>
+                <MudMenuItem>Sign Out</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
+    </MudTooltip>
+}
+
+@code {
+    bool logIn =  true;
+}

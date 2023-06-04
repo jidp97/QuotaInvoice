@@ -1,0 +1,53 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudTooltip Text="Desplegar Menu">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        </MudTooltip>
+        <MudSpacer />
+        <MudTooltip Text="@DarkModeTitle()">
+            <MudToggleIconButton @bind-Toggled="_isDarkMode"
+                                 Icon="@Icons.Material.Filled.WbSunny" Color="@Color.Warning"
+                                 ToggledIcon="@Icons.Material.Filled.DarkMode" />
+        </MudTooltip>
+        <SettingsMenu/>
+    </MudAppBar>
+    <MudSwipeArea OnSwipe="@OnSwipe" Style="width: 100%;">
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Color="Color.Dark" Variant="DrawerVariant.Temporary">
+            <MudDrawerHeader>
+                <MudText Typo="Typo.h6">Quota Invoice</MudText>
+            </MudDrawerHeader>
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent>
+            <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16 search-side">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+    </MudSwipeArea>
+</MudLayout>
+@code {
+    bool _drawerOpen = true;
+    public bool _isDarkMode;
+    private void DrawerToggle() => _drawerOpen = !_drawerOpen;
+    private string DarkModeTitle() => _isDarkMode ? "Modo oscuro" : "Modo claro";
+    public void OnSwipe(SwipeDirection direction)
+
+    {
+        if (direction == SwipeDirection.LeftToRight && !_drawerOpen)
+        {
+            _drawerOpen = true;
+            StateHasChanged();
+        }
+        else if (direction == SwipeDirection.RightToLeft && !_drawerOpen)
+        {
+            _drawerOpen = false;
+            StateHasChanged();
+        }
+    }
+}

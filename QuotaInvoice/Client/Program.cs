@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using QuotaInvoice.Client;
+using MudBlazor.Services;
+
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -10,5 +13,5 @@ builder.Services.AddHttpClient("QuotaInvoice.ServerAPI", client => client.BaseAd
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("QuotaInvoice.ServerAPI"));
-
+builder.Services.AddMudServices();
 await builder.Build().RunAsync();

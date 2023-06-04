@@ -1,0 +1,12 @@
+﻿    @if (imageExist)
+    {
+        <MudAvatar Image="icon-512" />
+    }
+    else
+    {
+        <MudAvatar Color="Color.Success">J</MudAvatar>
+    }
+
+@code {
+    private bool imageExist;
+}
