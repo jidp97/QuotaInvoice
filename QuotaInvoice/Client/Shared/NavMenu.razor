@@ -1,41 +1,16 @@
 ﻿<MudNavMenu>
-    @*<AuthorizeView>
-        <NotAuthorized>*@
+    <AuthorizeView>
+        <NotAuthorized>
             <MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Filled.Home">&nbsp; Inicia sesión</MudNavLink>
-        @*</NotAuthorized>
-        <Authorized>*@
+        </NotAuthorized>
+        <Authorized>
             <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home" Style="@($"color:{Colors.Shades.White};")">Home</MudNavLink>
-        @*</Authorized>
+        </Authorized>
     </AuthorizeView>
-    <AuthorizeView>*@
-        <MudNavGroup Title="Inventario" Icon="@Icons.Material.Filled.AllInbox">
-            <MudNavLink Href="inventario/search" Icon="@Icons.Material.Filled.Search">&nbsp; Consultar</MudNavLink>
-            <MudNavLink Href="inventario/index" Icon="@Icons.Material.Filled.Storage">&nbsp; Ver Inventario</MudNavLink>
-            <MudNavLink Href="empresa/index" Icon="@Icons.Material.Filled.LocationCity">&nbsp; Empresas</MudNavLink>
-            <MudNavLink Href="procesos-de-licitacion/index" Icon="@Icons.Material.Filled.Assignment">&nbsp; PDL</MudNavLink>
-            <MudNavLink Href="usos/index" Icon="@Icons.Material.Filled.Loyalty">&nbsp; Usos de equipos</MudNavLink>
-        </MudNavGroup>
-
-        <MudNavGroup Title="Taller" Icon="@Icons.Material.Filled.Build">
-            <MudNavLink Href="diagnosticos/index" Icon="@Icons.Material.Filled.DesktopWindows">&nbsp; Pendientes reparación</MudNavLink>
-            <MudNavLink Href="diagnosticos/revisados" Icon="@Icons.Material.Filled.Check">&nbsp; Equipos Revisados</MudNavLink>
-            <MudNavLink Href="parapieza/index" Icon="@Icons.Material.Filled.Computer">&nbsp; Equipos piezas</MudNavLink>
-            <MudNavLink Href="conduces/index" Icon="@Icons.Material.Filled.DepartureBoard">&nbsp; Conduces</MudNavLink>
-        </MudNavGroup>
-
-        <MudNavGroup Title="Categorías" Icon="@Icons.Material.Filled.Category">
-            <MudNavLink Href="items/index" Icon="@Icons.Material.Filled.Phonelink">&nbsp; Items</MudNavLink>
-            <MudNavLink Href="modelos/index" Icon="@Icons.Material.Filled.Flag">&nbsp; Modelos</MudNavLink>
-            <MudNavLink Href="suppliers/index" Icon="@Icons.Material.Filled.PersonOutline">&nbsp; Proveedores</MudNavLink>
-            <MudNavLink Href="incidencias/index" Icon="@Icons.Material.Filled.NewReleases">&nbsp; Incidencias</MudNavLink>
-            <MudNavLink Href="resultados/index" Icon="@Icons.Material.Filled.Description">&nbsp; Resultados</MudNavLink>
-            <MudNavLink Href="tipo-resultado/index" Icon="@Icons.Material.Filled.List">&nbsp; Tipos de Resultados</MudNavLink>
-        </MudNavGroup>
-    @*</AuthorizeView>
-    <AuthorizeView Policy="@Policies.IsAdmin">*@
+    <AuthorizeView Policy="@Policies.IsAdmin">
         <MudNavLink Href="usuarios" Icon="@Icons.Material.Filled.SupervisedUserCircle">&nbsp; Usuarios</MudNavLink>
-    @*</AuthorizeView>
-    <AuthorizeView>*@
+    </AuthorizeView>
+    <AuthorizeView>
         <MudNavLink Href="logOut" Icon="@Icons.Material.Filled.Logout">&nbsp; Salir</MudNavLink>
-    @*</AuthorizeView>*@
+    </AuthorizeView>
 </MudNavMenu>

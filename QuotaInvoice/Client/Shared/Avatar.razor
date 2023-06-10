@@ -1,12 +1,24 @@
-﻿    @if (imageExist)
+﻿
+@if (IsAuthenticated)
+{
+    @if (imageExist)
     {
-        <MudAvatar Image="icon-512" />
+        <MudAvatar Image="icon-512"  />
     }
     else
     {
-        <MudAvatar Color="Color.Success">J</MudAvatar>
+        <MudAvatar Color="Color.Success">@UserName?[0]</MudAvatar>
     }
+}
+else
+{
+    <MudAvatar Color="@Color.Dark">
+        <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Tertiary" Size="Size.Medium" aria-label="login"></MudIconButton>
+    </MudAvatar>
+}
 
 @code {
     private bool imageExist;
+    [Parameter] public bool IsAuthenticated { get; set; }
+    [Parameter] public string? UserName { get; set; }
 }

@@ -1,19 +1,26 @@
-﻿@if (logIn) {
-    <MudTooltip Text="José Ismael">
-        <MudMenu>
-            <ActivatorContent>
-                <Avatar/>
-            </ActivatorContent>
-            <ChildContent>
+﻿<MudTooltip Text="@UserName">
+    <MudMenu>
+        <ActivatorContent>
+            <Avatar IsAuthenticated="IsAuthenticated" UserName="@UserName"/>
+        </ActivatorContent>
+        <ChildContent>
+            @if (IsAuthenticated)
+            {
                 <MudMenuItem>Profile</MudMenuItem>
                 <MudMenuItem>Theme</MudMenuItem>
-                <MudMenuItem>Usage</MudMenuItem>
                 <MudMenuItem>Sign Out</MudMenuItem>
-            </ChildContent>
-        </MudMenu>
-    </MudTooltip>
-}
+            }
+            else
+            {
+                <MudMenuItem>Log in</MudMenuItem>
+            }
+
+        </ChildContent>
+    </MudMenu>
+</MudTooltip>
+
 
 @code {
-    bool logIn =  true;
+    [Parameter] public string? UserName { get; set; }
+    [Parameter] public bool IsAuthenticated { get; set;  }
 }

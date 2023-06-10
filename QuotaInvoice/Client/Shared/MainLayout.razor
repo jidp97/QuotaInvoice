@@ -15,7 +15,7 @@
                                  Icon="@Icons.Material.Filled.WbSunny" Color="@Color.Warning"
                                  ToggledIcon="@Icons.Material.Filled.DarkMode" />
         </MudTooltip>
-        <SettingsMenu/>
+        <SettingsMenu UserName="@UserName" IsAuthenticated="isAuthenticated"/>
     </MudAppBar>
     <MudSwipeArea OnSwipe="@OnSwipe" Style="width: 100%;">
         <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Color="Color.Dark" Variant="DrawerVariant.Temporary">
@@ -32,12 +32,13 @@
     </MudSwipeArea>
 </MudLayout>
 @code {
-    bool _drawerOpen = true;
-    public bool _isDarkMode;
+    public string? UserName { get; set; }
+    public bool isAuthenticated;
+    private bool _drawerOpen = true;
+    private bool _isDarkMode;
     private void DrawerToggle() => _drawerOpen = !_drawerOpen;
     private string DarkModeTitle() => _isDarkMode ? "Modo oscuro" : "Modo claro";
     public void OnSwipe(SwipeDirection direction)
-
     {
         if (direction == SwipeDirection.LeftToRight && !_drawerOpen)
         {
@@ -50,4 +51,12 @@
             StateHasChanged();
         }
     }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        UserName = user.Identity?.Name ?? "Iniciar sesión";
+        isAuthenticated = user?.Identity != null && user.Identity.IsAuthenticated;
+    }
+
 }
