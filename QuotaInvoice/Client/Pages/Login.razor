@@ -1,0 +1,24 @@
+﻿@page "/login"
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12" sm="7">
+        <MudText Typo="Typo.h4">Iniciar sesión</MudText>
+        <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+            <MudTextField InputType="InputType.Email" InputMode="InputMode.email" Label="Email" @bind-Value="loginModel.Email"></MudTextField>
+            <MudTextField InputType="InputType.Password" Label="Password" @bind-Value="loginModel.Password"></MudTextField>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled"ButtonType="ButtonType.Submit">Log in</MudButton>
+        </EditForm>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private LoginModel loginModel = new();
+    private async Task HandleLogin()
+    {
+        var result = await AuthService.Login(loginModel);
+        if (result.Successful)
+        {
+            UriHelper.NavigateTo("/");
+        }
+    }
+}

@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using Blazored.LocalStorage;
 using QuotaInvoice.Shared.Models;
 using Microsoft.AspNetCore.Components.Authorization;
+using QuotaInvoice.Client.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -16,6 +17,7 @@ builder.Services.AddAuthorizationCore(config =>
     config.AddPolicy(Policies.IsUser, Policies.IsUserPolicy());
 });
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddHttpClient("QuotaInvoice.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
 

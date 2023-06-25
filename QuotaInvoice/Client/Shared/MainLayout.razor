@@ -7,20 +7,20 @@
 <MudLayout>
     <MudAppBar>
         <MudTooltip Text="Desplegar Menu">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" aria-label="Desplegar menú" OnClick="@((e) => DrawerToggle())" />
         </MudTooltip>
         <MudSpacer />
         <MudTooltip Text="@DarkModeTitle()">
             <MudToggleIconButton @bind-Toggled="_isDarkMode"
                                  Icon="@Icons.Material.Filled.WbSunny" Color="@Color.Warning"
-                                 ToggledIcon="@Icons.Material.Filled.DarkMode" />
+                                 ToggledIcon="@Icons.Material.Filled.DarkMode" aria-label="@("Seleccionar " + DarkModeTitle())"/>
         </MudTooltip>
         <SettingsMenu UserName="@UserName" IsAuthenticated="isAuthenticated"/>
     </MudAppBar>
     <MudSwipeArea OnSwipe="@OnSwipe" Style="width: 100%;">
         <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Color="Color.Dark" Variant="DrawerVariant.Temporary">
             <MudDrawerHeader>
-                <MudText Typo="Typo.h6">Quota Invoice</MudText>
+                <MudText Typo="Typo.h6" aria-label="Quota Invoice">Quota Invoice</MudText>
             </MudDrawerHeader>
             <NavMenu />
         </MudDrawer>
