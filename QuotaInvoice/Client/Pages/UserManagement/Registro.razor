@@ -1,0 +1,79 @@
+﻿@*@page "/register"*@
+@using QuotaInvoice.Shared.Models
+@inject IAuthService AuthService
+@inject NavigationManager UriHelper
+@*@attribute [Authorize(Roles = "Admin")]*@
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var error in Errors)
+        {
+            <p>error</p>
+        }
+    </div>
+}
+<ModalDisplay>
+    <Content>
+        <EditForm Model="@RegisterModel" OnValidSubmit="@HandleRegistration">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+   
+                            <MudTextField Label="Correo Electronico" FullWidth="true" Variant="Variant.Outlined" @bind-Value="@RegisterModel.Email" />
+                            <ValidationMessage For="@(() => RegisterModel.Email)" />
+                  
+                           
+                            <MudTextField Label="Contraseña" @bind-Value="@RegisterModel.Password" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="Cambio" />
+                            <ValidationMessage For="@(() => RegisterModel.Password)" />
+                  
+                        
+                            <MudTextField Label="Verificar contraseña" @bind-Value="@RegisterModel.ConfirmPassword" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="Cambio" />
+                            <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+                  
+             
+            <MudButton Style="float:right;" Class="m-3" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Registrar</MudButton>
+        </EditForm>
+    </Content>
+</ModalDisplay>
+
+@code {
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    bool isShow;
+    private bool ShowErrors;
+    private IEnumerable<string> Errors;
+    [Parameter] public RegisterModel RegisterModel { get; set; } = new();
+    [Parameter] public int Id { get; set; }
+    private async Task HandleRegistration()
+    {
+        ShowErrors = false;
+
+        var result = await AuthService.Register(RegisterModel);
+
+        if (result.Successful)
+        {
+            UriHelper.NavigateTo("/usuarios");
+        }
+        else
+        {
+            Errors = result.Errors;
+            ShowErrors = true;
+        }
+    }
+
+    void Cambio()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

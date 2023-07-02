@@ -5,6 +5,6 @@ namespace QuotaInvoice.Shared.Models
     public class RegisterResult
     {
         public bool Successful { get; set; }
-        public required IEnumerable<string> Errors { get; set; }
+        public IEnumerable<string>? Errors { get; set; }
     }
 }

@@ -3,7 +3,7 @@
     public class LoginResult
     {
         public bool Successful { get; set; }
-        public required string Error { get; set; }
-        public required string Token { get; set; }
+        public string? Error { get; set; }
+        public string? Token { get; set; }
     }
 }
