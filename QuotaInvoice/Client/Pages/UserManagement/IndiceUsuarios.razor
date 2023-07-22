@@ -1,0 +1,102 @@
+﻿@page "/usuarios"
+@using QuotaInvoice.Client.Helpers
+@inject IJSRuntime JS
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mensaje
+@*@attribute [Authorize(Roles = "Admin")]*@
+
+<AddModalButton Color="Color.Primary" Entidad="RegisterModel"
+                     Item="registerModel" Controlador="controlador" DisableBackdropClick="false" Modal="crear.GetType()"
+                     Nombre="Agregar Usuario" Titulo="@("Creando Usuario")" Variant="Variant.Text">
+</AddModalButton>
+<AuthorizeView Policy="@Policies.IsAdmin">
+    <HTable Items="Usuarios" Context="usuario" HeadersArray="headers" Hover="true" Breakpoint="Breakpoint.Sm">
+        <BodyContent>
+            <MudTd DataLabel="Uusario">@usuario.Email</MudTd>
+            <MudTd DataLabel="Nombre">@usuario.FirtName @usuario.LastName</MudTd>
+            <MudTd DataLabel="Acciones">
+                <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                    <MudMenuItem Href="@($"/usuarios/editar/{usuario.UserId}")">Asignar Role</MudMenuItem>
+                    <ModifyModalButton Color="Color.Primary" Entidad="usuario" Id="usuario.UserId"
+                                       Item="usuario" DisableBackdropClick="false" Modal="editar.GetType()"
+                                       Nombre="Modificar" Titulo="@($"Modificando al Usuario {usuario.Email}")" Variant="Variant.Text">
+                    </ModifyModalButton>
+                    <MudMenuItem OnClick="(() => BorrarUsuario(usuario.UserId))">Borrar Usuario</MudMenuItem>
+                </MudMenu>
+            </MudTd>
+        </BodyContent>
+    </HTable>
+
+    <Pagination PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+                PaginasTotales="paginasTotales"></Pagination>
+</AuthorizeView>
+
+@code {
+    public List<UsuarioDTO> Usuarios { get; set; }
+    public RegisterModel registerModel { get; set; } = new();
+    readonly string[] headers = { "Usuario", "Nombre", "Cargo", "" };
+    private const string controlador = "usuarios";
+    readonly AddUser crear = new();
+    readonly Edit editar = new();
+
+    private int paginaActual = 1;
+    private int paginasTotales;
+
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar(int pagina = 1)
+    {
+        if (Usuarios == null)
+        {
+            await JS.LoadingAsync();
+        }
+        var response = await httpResponse.Get<List<UsuarioDTO>>($"api/usuarios?pagina={pagina}");
+
+        if (response.Error)
+        {
+
+            //await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
+            Console.WriteLine("Error");
+            await JS.RemoveLoadingAsync();
+
+        }
+        else
+        {
+            paginasTotales = int.Parse(response.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault() ?? "0" );
+            Usuarios = response.Response;
+        }
+
+        if (Usuarios?.Count >= 0 && Usuarios != null)
+        {
+            await JS.RemoveLoadingAsync();
+        }
+        if (Usuarios?.Count == 0 || Usuarios == null)   
+        {
+            await JS.EmptyDbNotifyAsync();
+        }
+    }
+
+    async Task BorrarUsuario(string idUsuario)
+    {
+
+        var personaSeleccionada = Usuarios.First(x => x.UserId == idUsuario);
+        string mensajeConfirmacion = $"Realmente deseas borrar a {personaSeleccionada.FirtName}?";
+        if (await JS.ConfirmAsync("Confirmar", mensajeConfirmacion, TipoMensajeSweetAlert.question))
+        {
+            await httpResponse.Delete($"api/usuarios/{idUsuario}");
+            //await Http.DeleteFromJsonAsync<UsuarioDTO>($"api/usuarios/{idUsuario}");
+            await Cargar();
+        }
+
+    }
+
+}

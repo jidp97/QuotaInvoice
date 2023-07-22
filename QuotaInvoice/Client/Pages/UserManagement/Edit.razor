@@ -1,0 +1,39 @@
+﻿
+@inject IJSRuntime JS
+@attribute [Authorize(Roles = "Admin")]
+
+<ModalDisplay>
+    <Content>
+        <FormularioUsuarios TextBoton="Guardar cambios" OnValidSubmit="@UpdateUserInformation" Usuario="@usuario" />
+    </Content>
+</ModalDisplay>
+
+@code {
+    [Parameter] public string Id { get; set; }
+    string url = "api/usuarios";
+    string editSucessMessage = "El usuario ha sido actualizado correctamente.";
+    string redirectTo = "usuarios";
+    string getDataAction = "obtenerUsuario";
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public UsuarioDTO usuario { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (usuario == null)
+        {
+            await JS.LoadingAsync();
+        }
+
+        usuario = await Http.GetFromJsonAsync<UsuarioDTO>($"{url}/{Id}/{getDataAction}") ?? throw new Exception("No se pudo obtener el usuario.");
+
+        if (usuario != null)
+        {
+            await JS.RemoveLoadingAsync();
+        }
+    }
+
+    private async Task UpdateUserInformation()
+    {
+        await Http.PutAsJsonAsync<UsuarioDTO>($"{url}/{Id}", usuario);
+    }
+}

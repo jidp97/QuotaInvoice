@@ -1,0 +1,39 @@
+﻿<EditForm Model="Usuario" OnValidSubmit="@OnValidSubmit">
+  
+                    <MudTextField Label=Id
+                                  @bind-Value="Usuario.UserId"
+                                  FullWidth="true"
+                                  Variant="Variant.Outlined"
+                                  ReadOnly="true" />
+                    <ValidationMessage For="(() => Usuario.UserId)" />
+             
+                    <MudTextField Label="Correo electrónico"
+                                  @bind-Value="Usuario.Email"
+                                  FullWidth="true"
+                                  Variant="Variant.Outlined" />
+                    <ValidationMessage For="(() => Usuario.Email)" />
+            
+                    <MudTextField Label="Label"
+                                  @bind-Value="Usuario.FirtName"
+                                  FullWidth=true
+                                  Variant="Variant.Outlined" />
+                    <ValidationMessage For="(() => Usuario.FirtName)" />
+         
+                    <MudTextField Label="Apellido"
+                                  @bind-Value="Usuario.LastName"
+                                  FullWidth="true"
+                                  Variant="Variant.Outlined" />
+                    <ValidationMessage For="(() => Usuario.LastName)" />
+   
+    <MudButton Style="float:right;" Class="m-3" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@TextBoton</MudButton>
+    <DataAnnotationsValidator />
+</EditForm>
+
+@code {
+    [Parameter] public UsuarioDTO Usuario { get; set; } = new UsuarioDTO();
+    [Parameter] public String TextBoton { get; set; } = "Salvar cambios";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Cancel() => MudDialog.Cancel();
+}

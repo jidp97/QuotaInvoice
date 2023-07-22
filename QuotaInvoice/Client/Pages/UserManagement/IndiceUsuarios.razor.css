@@ -1,0 +1,23 @@
+﻿.table td, .table th {
+    vertical-align: top;
+    border-top: 1px solid #ffffff !important;
+}
+
+::deep .titulo {
+    z-index: 1;
+    color: white !important;
+}
+
+::deep .white-btn {
+    background-color: white !important;
+    color: blueviolet;
+}
+
+.tbody, td, tfoot, th, thead, tr {
+    border-color: #f8f9fa;
+    border-bottom: hidden;
+}
+
+hr:not([size]) {
+    display: none;
+}

@@ -18,7 +18,7 @@ namespace QuotaInvoice.Server.Controllers
 
         public AccountsController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
-        [HttpPost, Authorize(Roles = "Admin")]
+      //  [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] RegisterModel model)
         {
             ApplicationUser newUser = new() { UserName = model.Email, Email = model.Email };

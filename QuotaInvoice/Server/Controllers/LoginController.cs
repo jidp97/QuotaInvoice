@@ -6,6 +6,8 @@ using QuotaInvoice.Shared.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+
 namespace QuotaInvoice.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -25,38 +27,37 @@ namespace QuotaInvoice.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var result = await _signInManager.PasswordSignInAsync(userName: login.Email ?? throw new NullReferenceException(message: "Username not found."),
-                                                                  password: login.Password ?? throw new NullReferenceException(message: "Enter a password"),
-                                                                  isPersistent: false,
-                                                                  lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
 
-            if (!result.Succeeded) return BadRequest(error: new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            if (!result.Succeeded) return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
 
-            var user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
-            var roles = await _signInManager.UserManager.GetRolesAsync(user: user ?? throw new NullReferenceException(message: "User not found."));
-            var claims = new List<Claim>
+            ApplicationUser? user = await _signInManager.UserManager.FindByEmailAsync(login.Email);
+            IList<string> roles = await _signInManager.UserManager.GetRolesAsync(user);
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.Name, login.Email)
             };
+            claims.AddRange(from role in roles
+                            select new Claim(ClaimTypes.Role, role));
 
-            foreach (var role in roles)
-            {
-                claims.Add(item: new Claim(type: ClaimTypes.Role,value: role));
-            }
+            string jwtSecretKey = _configuration["JwtSecurityKey"];
+            Console.WriteLine(jwtSecretKey);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(jwtSecretKey);
+            SymmetricSecurityKey key = new(key: keyBytes);
+            SigningCredentials creds = new(key: key, algorithm: SecurityAlgorithms.HmacSha256);
+            DateTime expiry = DateTime.Now.AddDays(value: Convert.ToInt32(value: _configuration["JwtExpiryInDays"]));
 
-            var key = new SymmetricSecurityKey(key: Encoding.UTF8.GetBytes(s: _configuration["JwtSecurityKey"] ?? throw new NullReferenceException(message: "Empty JwtSecurityKey")));
-            var creds = new SigningCredentials(key: key,algorithm: SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(value: Convert.ToInt32(_configuration["JwtExpiryInDays"]));
-
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = new(
                 issuer: _configuration["JwtIssuer"],
                 audience: _configuration["JwtAudience"],
                 claims: claims,
                 expires: expiry,
                 signingCredentials: creds
             );
-
-            return Ok(value: new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        
+            var loginResult = new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) };
+            return Ok(value: loginResult);
+          
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@page "/login"
-
+@inject IMostrarMensajes mensaje
 <MudGrid Justify="Justify.Center">
     <MudItem xs="12" sm="7">
         <MudText Typo="Typo.h4">Iniciar sesión</MudText>
@@ -12,17 +12,14 @@
 </MudGrid>
 
 @code {
-    private LoginModel loginModel = new();
-    private async Task HandleLogin()
+    LoginModel loginModel = new();
+    async Task HandleLogin()
     {
         var result = await AuthService.Login(loginModel);
+        
         if (result.Successful)
         {
             UriHelper.NavigateTo("/");
-        }
-        else
-        {
-            Console.WriteLine("Incorrect username or password");
         }
     }
 }
