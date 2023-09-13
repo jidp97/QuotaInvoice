@@ -1,0 +1,51 @@
+﻿@inject IDialogService Dialog
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@typeparam T
+
+<MudTooltip Text="@Nombre">
+    <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="@(() => OpenDialog())" />
+</MudTooltip>
+
+@code {
+
+    [Parameter] public Type Modal { get; set; }
+    [Parameter] public string Nombre { get; set; }
+    [Parameter] public string Titulo { get; set; }
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public Variant Variant { get; set; }
+    [Parameter] public bool DisableBackdropClick { get; set; }
+    [Parameter] public bool CloseOnEscapeKey { get; set; }
+    [Parameter] public int Id { get; set; }
+    [Parameter] public T Item { get; set; } = default(T);
+    [Parameter] public string Controlador { get; set; }
+    [Parameter] public string Entidad { get; set; }
+
+    async Task OpenDialog()
+    {
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraLarge,
+            FullWidth = true,
+            CloseButton = true,
+            DisableBackdropClick = DisableBackdropClick,
+            NoHeader = false,
+            Position = DialogPosition.Center,
+            CloseOnEscapeKey = true
+        };
+
+        var parameters = new DialogParameters
+        {
+            [$"{Entidad}"] = Item      
+
+        };
+
+        var dialog = Dialog.Show(Modal, Titulo, parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            //Item = await Http.GetFromJsonAsync<T>($"{Controlador}/{ID}");
+        }
+
+    }
+}

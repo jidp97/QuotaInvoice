@@ -1,0 +1,21 @@
+﻿@typeparam T
+<MudTable Items="Items" Style="width: 100%" Hover="Hover" Breakpoint="Breakpoint" Loading="Loading" LoadingProgressColor="LoadingProgressColor">
+    <HeaderContent>
+        @foreach (var i in HeadersArray)
+        {
+            <MudTh>@i</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        @BodyContent(context)
+    </RowTemplate>
+</MudTable>
+@code{
+    [Parameter] public List<T> Items { get; set; }
+    [Parameter] public bool Hover { get; set; }
+    [Parameter] public Breakpoint Breakpoint { get; set; }
+    [Parameter] public bool Loading { get; set; }
+    [Parameter] public Color LoadingProgressColor { get; set; }
+    [Parameter] public string[] HeadersArray { get; set; }
+    [Parameter] public RenderFragment<T> BodyContent { get; set; }
+}

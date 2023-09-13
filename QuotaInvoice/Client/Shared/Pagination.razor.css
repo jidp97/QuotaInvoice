@@ -1,0 +1,29 @@
+﻿::deep .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #2e0e4e !important;
+    border-color: #2e0e4e !important;
+}
+
+::deep .page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #2e0e4e;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-top-color: rgb(222, 226, 230);
+    border-right-color: rgb(222, 226, 230);
+    border-bottom-color: rgb(222, 226, 230);
+    border-left-color: rgb(222, 226, 230);
+}
+
+    ::deep .page-link:hover {
+        z-index: 2;
+        color: #2c0b4d;
+        text-decoration: none;
+        background-color: #46174173;
+        border-color: #dee2e6;
+    }

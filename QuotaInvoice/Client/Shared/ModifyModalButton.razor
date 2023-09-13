@@ -1,0 +1,47 @@
+﻿@inject IDialogService Dialog
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@typeparam T
+
+<MudButton OnClick="@(() => OpenDialog(Id))" Variant="Variant" Color="Color">@Nombre</MudButton>
+
+@code {
+
+    [Parameter] public Type Modal { get; set; }
+    [Parameter] public string Nombre { get; set; }
+    [Parameter] public string Titulo { get; set; }
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public Variant Variant { get; set; }
+    [Parameter] public bool DisableBackdropClick { get; set; }
+    [Parameter] public bool CloseOnEscapeKey { get; set; }
+    [Parameter] public object Id { get; set; }
+    [Parameter] public T Item { get; set; } = default(T);
+    [Parameter] public string Entidad { get; set; }
+
+    public async Task OpenDialog(object ID)
+    {
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraLarge,
+            FullWidth = true,
+            CloseButton = true,
+            DisableBackdropClick = DisableBackdropClick,
+            NoHeader = false,
+            Position = DialogPosition.Center,
+            CloseOnEscapeKey = true
+        };
+        var parameters = new DialogParameters
+        {
+            ["Id"] = ID,
+            [$"{Entidad}"] = Item
+        };
+
+        var dialog = Dialog.Show(Modal, Titulo, parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            //Item = await Http.GetFromJsonAsync<T>($"{Controlador}/{ID}");
+        }
+    }
+}
