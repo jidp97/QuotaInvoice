@@ -7,10 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuotaInvoice.Server.Controllers
 {
@@ -39,19 +35,20 @@ namespace QuotaInvoice.Server.Controllers
         }
 
         [HttpGet("roles")]
-        public async Task<ActionResult<List<RolDTO>>> Get()
-        {
-            return await context.Roles
+        public async Task<ActionResult<List<RolDTO>>> Get() => await context.Roles
                 .Select(x => new RolDTO { Nombre = x.Name, RoleId = x.Id }).ToListAsync();
-        }
 
         [HttpGet("{UserId}/obtenerUsuario")]
-        public async Task<ActionResult<UsuarioDTO>> GetAsync(string UserId)
-        {
-            return await context.Users
-                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id, FirtName = x.FirstName, LastName = x.LastName })
+        public async Task<ActionResult<UsuarioDTO>> GetAsync(string UserId) => await context.Users
+                .Select(x => new UsuarioDTO
+                {
+                    Email = x.Email,
+                    UserId = x.Id,
+                    FirtName = x.FirstName,
+                    LastName = x.LastName,
+                    Cargo = x.Cargo
+                })
                 .FirstOrDefaultAsync(x => x.UserId == UserId);
-        }
 
         [HttpPut]
         public async Task<ActionResult> PutAsync(UsuarioDTO usuario)
@@ -71,15 +68,7 @@ namespace QuotaInvoice.Server.Controllers
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
             }
-            //var phoneNumber = user.PhoneNumber;
-            //if (usuario.PhoneNumber != phoneNumber)
-            //{
-            //    var setPhoneResult = await userManager.SetPhoneNumberAsync(user, usuario.PhoneNumber);
-            //    if (!setPhoneResult.Succeeded)
-            //    {
-            //        throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
-            //    }
-            //}
+
             if (usuario.FirtName != user.FirstName)
             {
                 user.FirstName = usuario.FirtName;

@@ -1,15 +1,16 @@
-﻿<MudTooltip Text="@UserName">
+﻿@inject NavigationManager navegationManager
+<MudTooltip Text="@UserName">
     <MudMenu>
         <ActivatorContent>
             <Avatar IsAuthenticated="IsAuthenticated" UserName="@UserName"/>
         </ActivatorContent>
         <ChildContent>
             @if (IsAuthenticated)
-            {
-                <MudMenuItem>Profile</MudMenuItem>
-                <MudMenuItem>Theme</MudMenuItem>
-                <MudMenuItem>Sign Out</MudMenuItem>
-            }
+                {
+                    <MudMenuItem>Profile</MudMenuItem>
+                    <MudMenuItem>Theme</MudMenuItem>
+                    <MudMenuItem OnClick="(() => navegationManager.NavigateTo(logOut))">Sign Out</MudMenuItem>
+                }
             else
             {
                 <MudMenuItem>Log in</MudMenuItem>
@@ -22,5 +23,6 @@
 
 @code {
     [Parameter] public string? UserName { get; set; }
-    [Parameter] public bool IsAuthenticated { get; set;  }
-}
+    [Parameter] public bool IsAuthenticated { get; set; }
+    public string logOut { get; set; } = "/logout";
+    }

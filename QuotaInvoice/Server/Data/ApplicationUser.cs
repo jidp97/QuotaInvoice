@@ -7,6 +7,6 @@ namespace QuotaInvoice.Server.Data
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Image { get; set; }
-        //public string? Name => FirstName + LastName;
+        public string? Cargo { get; set; }
     }
 }

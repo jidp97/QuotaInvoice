@@ -35,29 +35,21 @@ namespace QuotaInvoice.Client.Services
             {
                 HttpResponseMessage result = await _httpClient.PostAsJsonAsync("api/Login", loginModel);
                 LoginResult? passedresult = await result.Content.ReadFromJsonAsync<LoginResult?>();
-                if (!passedresult.Successful)
-                {
-                    await _mostrarMensajes.MostrarMensajeError(mensaje: "Incorrect username or password");
-                }
-                else
-                {
-                    await _localStorage.SetItemAsync(key: "authToken", passedresult.Token);
-                    ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(passedresult.Token);
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", passedresult.Token);
-                    return passedresult;
-                }
-                
+                await _localStorage.SetItemAsync(key: "authToken", passedresult.Token);
+                ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(passedresult.Token);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", passedresult.Token);
+                return passedresult;
             }
             catch (Exception ex)
             {
-                if(ex is JsonException)
+                if (ex is JsonException)
                 {
                     await _mostrarMensajes.MostrarMensajeError(ex.Message.ToString());
                 }
                 else
                 {
                     throw;
-                }                                        
+                }
             }
             return new LoginResult { Successful = false, Error = "Invalid credentials" };
         }

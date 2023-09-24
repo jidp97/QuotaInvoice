@@ -1,4 +1,4 @@
-﻿@*@attribute [Authorize(Roles = "Admin")]*@
+﻿@attribute [Authorize(Roles = "Admin")]
 
 @if (ShowErrors)
 {
@@ -19,11 +19,11 @@
                             <ValidationMessage For="@(() => RegisterModel.Email)" />
                   
                            
-                            <MudTextField Label="Contraseña" @bind-Value="@RegisterModel.Password" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="Cambio" />
+                            <MudTextField Label="Contraseña" @bind-Value="@RegisterModel.Password" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
                             <ValidationMessage For="@(() => RegisterModel.Password)" />
                   
                         
-                            <MudTextField Label="Verificar contraseña" @bind-Value="@RegisterModel.ConfirmPassword" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="Cambio" />
+                            <MudTextField Label="Verificar contraseña" @bind-Value="@RegisterModel.ConfirmPassword" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
                             <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
                   
              
@@ -57,16 +57,13 @@
         }
     }
 
-    void Cambio()
+    void ShowPassword()
     {
-        @if (isShow)
-        {
+        @if (isShow){
             isShow = false;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
             PasswordInput = InputType.Password;
-        }
-        else
-        {
+        }else{
             isShow = true;
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;

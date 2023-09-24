@@ -5,11 +5,6 @@ namespace QuotaInvoice.Server.Helpers
 {
     public static class EnumerableExtensions
     {
-        //public static TSource? GetAll<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        //{
-        //    return source.FirstOrDefault(predicate);
-
-        //}
         public static IEnumerable<TSource> GetAll<TSource>(this IEnumerable<TSource> source)
         {
             return Enumerable.ToList(source);

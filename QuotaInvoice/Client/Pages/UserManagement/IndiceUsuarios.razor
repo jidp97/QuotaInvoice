@@ -3,20 +3,22 @@
 @inject IJSRuntime JS
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mensaje
-@*@attribute [Authorize(Roles = "Admin")]*@
+@attribute [Authorize(Roles = "Admin")]
 
 <AddModalButton Color="Color.Primary" Entidad="RegisterModel"
-                     Item="registerModel" Controlador="controlador" DisableBackdropClick="false" Modal="crear.GetType()"
-                     Nombre="Agregar Usuario" Titulo="@("Creando Usuario")" Variant="Variant.Text">
+                     Item="registerModel" Controlador="@controlador" DisableBackdropClick="false" Modal="crear.GetType()"
+                     Nombre="Agregar Usuario" Titulo="@("Registro de usuarios")" Variant="Variant.Text">
 </AddModalButton>
 <AuthorizeView Policy="@Policies.IsAdmin">
     <HTable Items="Usuarios" Context="usuario" HeadersArray="headers" Hover="true" Breakpoint="Breakpoint.Sm">
         <BodyContent>
             <MudTd DataLabel="Uusario">@usuario.Email</MudTd>
             <MudTd DataLabel="Nombre">@usuario.FirtName @usuario.LastName</MudTd>
+            <MudTd DataLabel="Cargo">@usuario.Cargo</MudTd>
+
             <MudTd DataLabel="Acciones">
                 <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                    <MudMenuItem Href="@($"/usuarios/editar/{usuario.UserId}")">Asignar Role</MudMenuItem>
+                    <MudMenuItem Href="@($"/usuarios/handlingRoles/{usuario.UserId}")">Asignar Role</MudMenuItem>
                     <ModifyModalButton Color="Color.Primary" Entidad="usuario" Id="usuario.UserId"
                                        Item="usuario" DisableBackdropClick="false" Modal="editar.GetType()"
                                        Nombre="Modificar" Titulo="@($"Modificando al Usuario {usuario.Email}")" Variant="Variant.Text">
@@ -63,11 +65,8 @@
 
         if (response.Error)
         {
-
-            //await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
-            Console.WriteLine("Error");
+            await mensaje.MostrarMensajeError(await response.GetBody());
             await JS.RemoveLoadingAsync();
-
         }
         else
         {
@@ -85,9 +84,8 @@
         }
     }
 
-    async Task BorrarUsuario(string idUsuario)
+    private async Task BorrarUsuario(string idUsuario)
     {
-
         var personaSeleccionada = Usuarios.First(x => x.UserId == idUsuario);
         string mensajeConfirmacion = $"Realmente deseas borrar a {personaSeleccionada.FirtName}?";
         if (await JS.ConfirmAsync("Confirmar", mensajeConfirmacion, TipoMensajeSweetAlert.question))

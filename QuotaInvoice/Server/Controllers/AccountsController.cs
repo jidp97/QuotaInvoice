@@ -1,11 +1,8 @@
-﻿using QuotaInvoice.Shared;
-using QuotaInvoice.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
 using QuotaInvoice.Server.Data;
+using QuotaInvoice.Shared.Models;
 
 namespace QuotaInvoice.Server.Controllers
 {
@@ -18,7 +15,7 @@ namespace QuotaInvoice.Server.Controllers
 
         public AccountsController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
 
-      //  [HttpPost, Authorize(Roles = "Admin")]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] RegisterModel model)
         {
             ApplicationUser newUser = new() { UserName = model.Email, Email = model.Email };
@@ -33,12 +30,6 @@ namespace QuotaInvoice.Server.Controllers
             }
             // Add all new users to the User role
             await _userManager.AddToRoleAsync(newUser, "User");
-
-             //Add new users whose email starts with 'admin' to the Admin role
-            if (newUser.Email.StartsWith("admin"))
-            {
-                await _userManager.AddToRoleAsync(newUser, "Admin");
-            }
 
             return Ok(new RegisterResult { Successful = true });
         }

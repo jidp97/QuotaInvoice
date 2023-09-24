@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DevelopmentConnection")));
+                        options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("MacOsConnection")));
 builder.Services.AddDefaultIdentity<ApplicationUser>()
                     .AddRoles<IdentityRole>()
                         .AddEntityFrameworkStores<ApplicationDbContext>();

@@ -39,12 +39,13 @@ namespace QuotaInvoice.Server.Controllers
             };
             claims.AddRange(from role in roles
                             select new Claim(ClaimTypes.Role, role));
-
+            //header
             string jwtSecretKey = _configuration["JwtSecurityKey"];
-            Console.WriteLine(jwtSecretKey);
             byte[] keyBytes = Encoding.UTF8.GetBytes(jwtSecretKey);
             SymmetricSecurityKey key = new(key: keyBytes);
+            //signature
             SigningCredentials creds = new(key: key, algorithm: SecurityAlgorithms.HmacSha256);
+            //payload
             DateTime expiry = DateTime.Now.AddDays(value: Convert.ToInt32(value: _configuration["JwtExpiryInDays"]));
 
             JwtSecurityToken token = new(
