@@ -9,6 +9,9 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <None Remove="Hubs\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -43,6 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Hubs\" />
   </ItemGroup>
 
 </Project>

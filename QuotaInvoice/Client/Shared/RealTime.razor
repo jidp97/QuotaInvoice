@@ -1,0 +1,88 @@
+﻿@inject NavigationManager navigationManager
+@inject IMatToaster Toaster
+@inject IMethods methods
+
+@code {
+
+    private HubConnection hubConnection;
+    string lastUpdate = String.Empty;
+    [Parameter] public string Hub { get; set; }
+    [Parameter] public EventCallback Cargar { get; set; }
+    [Parameter] public string Area { get; set; }
+    [Parameter] public string UpdateMessage { get; set; }
+    [Parameter] public string CreateMessage { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            hubConnection = new HubConnectionBuilder()
+            .WithUrl(navigationManager.ToAbsoluteUri($"/{Hub}"))
+            .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
+            .Build();
+
+            hubConnection.On("RecieveMessage", () =>
+            {
+                lastUpdate = DateTime.Now.ToString();
+                StateHasChanged();
+                CallLoadData();
+            });
+            hubConnection.On("Editado", () =>
+            {
+                lastUpdate = DateTime.Now.ToString();
+                StateHasChanged();
+                CallEditData();
+
+            });
+            hubConnection.On("Eliminado", () =>
+            {
+                lastUpdate = DateTime.Now.ToString();
+                StateHasChanged();
+                DeleteData();
+
+            });
+            hubConnection.On("Generico", () =>
+            {
+                lastUpdate = DateTime.Now.ToString();
+                StateHasChanged();
+                CallEditData();
+
+            });
+            await hubConnection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            lastUpdate = ex.ToString();
+        }
+        await Cargar.InvokeAsync();
+    }
+    private void CallLoadData()
+    {
+        Task.Run(async () =>
+        {
+            methods.Show(CreateMessage, Area, MatToastType.Info, "done");
+            await Cargar.InvokeAsync();
+        });
+    }
+    private void CallEditData()
+    {
+        Task.Run(async () =>
+        {
+            methods.Show(UpdateMessage, Area, MatToastType.Info, "done");
+            await Cargar.InvokeAsync();
+        });
+    }
+    private void DeleteData()
+    {
+        Task.Run(async () =>
+        {
+            await Cargar.InvokeAsync();
+        });
+    }
+
+    public void Dispose()
+    {
+        _ = hubConnection.DisposeAsync();
+
+    }
+
+}

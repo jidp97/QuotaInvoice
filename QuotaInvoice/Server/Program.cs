@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QuotaInvoice.Server.Data;
 using QuotaInvoice.Shared.Models;
+using QuotaInvoice.Server.Hubs;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -76,6 +77,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+app.MapHub<ProcesosHub>("/ProcesosHub");
 app.MapFallbackToFile("index.html");
 
 app.Run();
