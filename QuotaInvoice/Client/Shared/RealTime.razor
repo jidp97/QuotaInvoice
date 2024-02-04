@@ -1,4 +1,4 @@
-﻿@* @inject NavigationManager navigationManager
+﻿@inject NavigationManager navigationManager
 @inject IMatToaster Toaster
 @inject IMethods methods
 
@@ -59,7 +59,7 @@
     {
         Task.Run(async () =>
         {
-            methods.Show(CreateMessage, Area, MatToastType.Info, "done");
+            methods.ShowMessage(CreateMessage, Area, MatToastType.Info, "done");
             await Cargar.InvokeAsync();
         });
     }
@@ -67,7 +67,7 @@
     {
         Task.Run(async () =>
         {
-            methods.Show(UpdateMessage, Area, MatToastType.Info, "done");
+            methods.ShowMessage(UpdateMessage, Area, MatToastType.Info, "done");
             await Cargar.InvokeAsync();
         });
     }
@@ -84,4 +84,4 @@
         _ = hubConnection.DisposeAsync();
 
     }
-} *@
+}
