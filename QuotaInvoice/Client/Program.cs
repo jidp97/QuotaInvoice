@@ -21,6 +21,7 @@ builder.Services.AddAuthorizationCore(config =>
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHttpResponse, HttpResponse>();
+builder.Services.AddScoped<IMethods, Methods>();
 builder.Services.AddScoped<IMostrarMensajes, MostrarMensajes>();
 builder.Services.AddHttpClient("QuotaInvoice.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
 

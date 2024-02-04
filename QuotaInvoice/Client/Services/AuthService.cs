@@ -14,44 +14,35 @@ namespace QuotaInvoice.Client.Services
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
         private readonly IMostrarMensajes _mostrarMensajes;
-        private readonly IHttpResponse _httpResponse;
 
         public AuthService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage,
-                           IMostrarMensajes mostrarMensajes,
-                           IHttpResponse httpResponse)
+                           IMostrarMensajes mostrarMensajes)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
             _mostrarMensajes = mostrarMensajes;
-            _httpResponse = httpResponse;
         }
 
         public async Task<LoginResult> Login(LoginModel loginModel)
-        {   
-            try
+        {
+            var result = await _httpClient.PostAsJsonAsync("api/Login", loginModel);
+            Console.WriteLine(result);
+            var passedresult = await result.Content.ReadFromJsonAsync<LoginResult>();
+            Console.WriteLine("ERROR 2:");
+            Console.WriteLine(passedresult);
+            if (passedresult.Successful)
             {
-                HttpResponseMessage result = await _httpClient.PostAsJsonAsync("api/Login", loginModel);
-                LoginResult? passedresult = await result.Content.ReadFromJsonAsync<LoginResult?>();
-                await _localStorage.SetItemAsync(key: "authToken", passedresult.Token);
+                await _localStorage.SetItemAsync("authToken", passedresult.Token);
                 ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(passedresult.Token);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", passedresult.Token);
+
                 return passedresult;
             }
-            catch (Exception ex)
-            {
-                if (ex is JsonException)
-                {
-                    await _mostrarMensajes.MostrarMensajeError(ex.Message.ToString());
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return new LoginResult { Successful = false, Error = "Invalid credentials" };
+
+            return passedresult;
         }
 
         public async Task<RegisterResult> Register(RegisterModel registerModel)

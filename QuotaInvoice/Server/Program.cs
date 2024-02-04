@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("MacOsConnection")));
+                        options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DevelopmentConnection")));
 builder.Services.AddDefaultIdentity<ApplicationUser>()
                     .AddRoles<IdentityRole>()
                         .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -78,7 +78,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
-app.MapHub<ProcesosHub>("/ProcesosHub");
+//app.MapHub<ProcesosHub>("/ProcesosHub");
 app.MapFallbackToFile("index.html");
 
 app.Run();
