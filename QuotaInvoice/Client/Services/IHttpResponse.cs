@@ -1,4 +1,6 @@
-﻿namespace QuotaInvoice.Client.Services
+﻿using System.Threading.Tasks;
+
+namespace QuotaInvoice.Client.Services
 {
     public interface IHttpResponse
     {

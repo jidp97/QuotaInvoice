@@ -1,4 +1,6 @@
-﻿namespace QuotaInvoice.Server.Services;
+﻿using System.Threading.Tasks;
+
+namespace QuotaInvoice.Server.Services;
 
 public interface Interfaces
 {

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using QuotaInvoice.Client.Services;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace QuotaInvoice.Client.Services;
 

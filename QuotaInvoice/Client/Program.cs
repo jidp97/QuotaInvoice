@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using QuotaInvoice.Client.Services;
 using QuotaInvoice.Client.Helpers;
 using MatBlazor;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using System;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -23,10 +26,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHttpResponse, HttpResponse>();
 builder.Services.AddScoped<IMethods, Methods>();
 builder.Services.AddScoped<IMostrarMensajes, MostrarMensajes>();
-builder.Services.AddHttpClient("QuotaInvoice.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
 
-// Supply HttpClient instances that include access tokens when making requests to the server project
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("QuotaInvoice.ServerAPI"));
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddMudServices();
 builder.Services.AddMatToaster(config =>
 {

@@ -5,6 +5,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using QuotaInvoice.Client.Helpers;
+using System.Threading.Tasks;
+using System;
+using System.Net.Http;
 
 namespace QuotaInvoice.Client.Services
 {
@@ -29,10 +32,7 @@ namespace QuotaInvoice.Client.Services
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
             var result = await _httpClient.PostAsJsonAsync("api/Login", loginModel);
-            Console.WriteLine(result);
             var passedresult = await result.Content.ReadFromJsonAsync<LoginResult>();
-            Console.WriteLine("ERROR 2:");
-            Console.WriteLine(passedresult);
             if (passedresult.Successful)
             {
                 await _localStorage.SetItemAsync("authToken", passedresult.Token);

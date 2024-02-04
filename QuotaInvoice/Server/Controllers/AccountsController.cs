@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuotaInvoice.Server.Data;
 using QuotaInvoice.Shared.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QuotaInvoice.Server.Controllers
 {

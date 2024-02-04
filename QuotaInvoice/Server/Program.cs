@@ -7,6 +7,11 @@ using QuotaInvoice.Server.Data;
 using QuotaInvoice.Shared.Models;
 using QuotaInvoice.Server.Hubs;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +23,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
                         .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
                    {
                        options.TokenValidationParameters = new TokenValidationParameters
@@ -29,9 +34,8 @@ builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.Authenticati
                            ValidateIssuerSigningKey = true,
                            ValidIssuer = builder.Configuration["JwtIssuer"],
                            ValidAudience = builder.Configuration["JwtAudience"],
-                           IssuerSigningKey = new SymmetricSecurityKey(key: Encoding.UTF8.GetBytes(s: builder.Configuration["JwtSecurityKey"] ?? throw new NullReferenceException(message: "Empty JwtSecurityKey")))
+                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"]))
                        };
-                 
                    });
 builder.Services.AddAuthorization(config =>
 {
@@ -79,6 +83,11 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 app.MapHub<ProcesosHub>("/ProcesosHub");
-app.MapFallbackToFile("index.html");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ProcesosHub>("/ProcesosHub");
+    endpoints.MapFallbackToFile("index.html");
+});
 
 app.Run();
