@@ -62,7 +62,6 @@
             await JS.LoadingAsync();
         }
         var response = await httpResponse.Get<List<UsuarioDTO>>($"api/usuarios?pagina={pagina}");
-
         if (response.Error)
         {
             await mensaje.MostrarMensajeError(await response.GetBody());

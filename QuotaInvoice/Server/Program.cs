@@ -78,7 +78,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
-//app.MapHub<ProcesosHub>("/ProcesosHub");
+app.MapHub<ProcesosHub>("/ProcesosHub");
 app.MapFallbackToFile("index.html");
 
 app.Run();
