@@ -38,6 +38,7 @@ builder.Services.AddAuthorization(config =>
     config.AddPolicy(Policies.IsAdmin, Policies.IsAdminPolicy());
     config.AddPolicy(Policies.IsUser, Policies.IsUserPolicy());
 });
+builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMvc().AddNewtonsoftJson(options =>
                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
