@@ -7,12 +7,12 @@ namespace QuotaInvoice.Client.Services
 
         public static async Task<object> SuccessNotificationAsync(this IJSRuntime js, string message)
         {
-            return js.InvokeAsync<object>("NotiflixSucess", message);
+            return await js.InvokeAsync<object>("NotiflixSucess", message);
         }
 
         public static async Task<object> WarningNotificationAsync(this IJSRuntime js, string message)
         {
-            return js.InvokeAsync<object>("NotiflixWarning", message);
+            return await js.InvokeAsync<object>("NotiflixWarning", message);
         }
 
     }
