@@ -10,6 +10,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <None Remove="Hubs\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
@@ -47,6 +48,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Hubs\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
