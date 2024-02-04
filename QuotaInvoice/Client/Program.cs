@@ -7,7 +7,7 @@ using QuotaInvoice.Shared.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using QuotaInvoice.Client.Services;
 using QuotaInvoice.Client.Helpers;
-// using MatBlazor;
+using MatBlazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -27,13 +27,13 @@ builder.Services.AddHttpClient("QuotaInvoice.ServerAPI", client => client.BaseAd
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("QuotaInvoice.ServerAPI"));
 builder.Services.AddMudServices();
-// builder.Services.AddMatToaster(config =>
-// {
-//     config.Position = MatToastPosition.BottomRight;
-//     config.PreventDuplicates = true;
-//     config.NewestOnTop = true;
-//     config.ShowCloseButton = true;
-//     config.MaximumOpacity = 95;
-//     config.VisibleStateDuration = 3000;
-// });
+builder.Services.AddMatToaster(config =>
+{
+    config.Position = MatToastPosition.BottomRight;
+    config.PreventDuplicates = true;
+    config.NewestOnTop = true;
+    config.ShowCloseButton = true;
+    config.MaximumOpacity = 95;
+    config.VisibleStateDuration = 3000;
+});
 await builder.Build().RunAsync();
