@@ -9,7 +9,7 @@
                      Item="registerModel" Controlador="@controlador" DisableBackdropClick="false" Modal="crear.GetType()"
                      Nombre="Agregar Usuario" Titulo="@("Registro de usuarios")" Variant="Variant.Text">
 </AddModalButton>
-<AuthorizeView Policy="@Policies.IsAdmin">
+<AuthorizeView>
     <HTable Items="Usuarios" Context="usuario" HeadersArray="headers" Hover="true" Breakpoint="Breakpoint.Sm">
         <BodyContent>
             <MudTd DataLabel="Uusario">@usuario.Email</MudTd>
