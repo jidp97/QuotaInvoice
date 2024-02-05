@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using QuotaInvoice.Shared.Entities;
 
 namespace QuotaInvoice.Server.Data
 {
@@ -14,5 +15,9 @@ namespace QuotaInvoice.Server.Data
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<CreditCard> CreditCards { get; set; }
+        public DbSet<MetroCard> MetroCards { get; set; }
+        public DbSet<TravelHistory> TravelsHistory { get; set; }
     }
 }

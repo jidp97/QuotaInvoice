@@ -3,10 +3,10 @@
     "QuotaInvoice.Client": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:51043;http://localhost:51045",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:51043;http://localhost:51045"
+      }
     }
   }
 }
