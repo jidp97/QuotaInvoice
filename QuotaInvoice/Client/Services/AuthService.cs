@@ -31,7 +31,8 @@ namespace QuotaInvoice.Client.Services
 
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/Login", loginModel);
+            var result = await _httpClient.PostAsJsonAsync("Login", loginModel);
+            Console.WriteLine(result);
             var passedresult = await result.Content.ReadFromJsonAsync<LoginResult>();
             if (passedresult.Successful)
             {

@@ -1,4 +1,4 @@
-﻿@attribute [Authorize(Roles = "Admin")]
+﻿@attribute [Authorize(Policy = Policies.IsAdmin)]
 
 @if (ShowErrors)
 {
@@ -14,19 +14,19 @@
         <EditForm Model="@RegisterModel" OnValidSubmit="@HandleRegistration">
             <DataAnnotationsValidator />
             <ValidationSummary />
-   
-                            <MudTextField Label="Correo Electronico" FullWidth="true" Variant="Variant.Outlined" @bind-Value="@RegisterModel.Email" />
-                            <ValidationMessage For="@(() => RegisterModel.Email)" />
-                  
-                           
-                            <MudTextField Label="Contraseña" @bind-Value="@RegisterModel.Password" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
-                            <ValidationMessage For="@(() => RegisterModel.Password)" />
-                  
-                        
-                            <MudTextField Label="Verificar contraseña" @bind-Value="@RegisterModel.ConfirmPassword" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
-                            <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
-                  
-             
+
+            <MudTextField Label="Correo Electronico" FullWidth="true" Variant="Variant.Outlined" @bind-Value="@RegisterModel.Email" />
+            <ValidationMessage For="@(() => RegisterModel.Email)" />
+
+
+            <MudTextField Label="Contraseña" @bind-Value="@RegisterModel.Password" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
+            <ValidationMessage For="@(() => RegisterModel.Password)" />
+
+
+            <MudTextField Label="Verificar contraseña" @bind-Value="@RegisterModel.ConfirmPassword" Variant="Variant.Outlined" FullWidth="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" />
+            <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+
+
             <MudButton Style="float:right;" Class="m-3" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Registrar</MudButton>
         </EditForm>
     </Content>
@@ -59,11 +59,14 @@
 
     void ShowPassword()
     {
-        @if (isShow){
+        @if (isShow)
+        {
             isShow = false;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
             PasswordInput = InputType.Password;
-        }else{
+        }
+        else
+        {
             isShow = true;
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;

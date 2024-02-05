@@ -3,19 +3,16 @@
 @inject IJSRuntime JS
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mensaje
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Policy = Policies.IsAdmin)]
 
 <AddModalButton Color="Color.Primary" Entidad="RegisterModel"
-                     Item="registerModel" Controlador="@controlador" DisableBackdropClick="false" Modal="crear.GetType()"
-                     Nombre="Agregar Usuario" Titulo="@("Registro de usuarios")" Variant="Variant.Text">
+                Item="registerModel" Controlador="@controlador" DisableBackdropClick="false" Modal="crear.GetType()"
+                Nombre="Agregar Usuario" Titulo="@("Registro de usuarios")" Variant="Variant.Text">
 </AddModalButton>
-<AuthorizeView>
+<AuthorizeView Policy="@Policies.IsAdmin">
     <HTable Items="Usuarios" Context="usuario" HeadersArray="headers" Hover="true" Breakpoint="Breakpoint.Sm">
         <BodyContent>
             <MudTd DataLabel="Uusario">@usuario.Email</MudTd>
-            <MudTd DataLabel="Nombre">@usuario.FirtName @usuario.LastName</MudTd>
-            <MudTd DataLabel="Cargo">@usuario.Cargo</MudTd>
-
             <MudTd DataLabel="Acciones">
                 <MudMenu Icon="@Icons.Material.Filled.MoreVert">
                     <MudMenuItem Href="@($"/usuarios/handlingRoles/{usuario.UserId}")">Asignar Role</MudMenuItem>
@@ -36,7 +33,7 @@
 @code {
     public List<UsuarioDTO> Usuarios { get; set; }
     public RegisterModel registerModel { get; set; } = new();
-    readonly string[] headers = { "Usuario", "Nombre", "Cargo", "" };
+    readonly string[] headers = { "Usuario", "" };
     private const string controlador = "usuarios";
     readonly AddUser crear = new();
     readonly Edit editar = new();
@@ -69,7 +66,7 @@
         }
         else
         {
-            paginasTotales = int.Parse(response.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault() ?? "0" );
+            paginasTotales = int.Parse(response.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault() ?? "0");
             Usuarios = response.Response;
         }
 
@@ -77,7 +74,7 @@
         {
             await JS.RemoveLoadingAsync();
         }
-        if (Usuarios?.Count == 0 || Usuarios == null)   
+        if (Usuarios?.Count == 0 || Usuarios == null)
         {
             await JS.EmptyDbNotifyAsync();
         }
@@ -86,7 +83,7 @@
     private async Task BorrarUsuario(string idUsuario)
     {
         var personaSeleccionada = Usuarios.First(x => x.UserId == idUsuario);
-        string mensajeConfirmacion = $"Realmente deseas borrar a {personaSeleccionada.FirtName}?";
+        string mensajeConfirmacion = $"Realmente deseas borrar a {personaSeleccionada.Email}?";
         if (await JS.ConfirmAsync("Confirmar", mensajeConfirmacion, TipoMensajeSweetAlert.question))
         {
             await httpResponse.Delete($"api/usuarios/{idUsuario}");

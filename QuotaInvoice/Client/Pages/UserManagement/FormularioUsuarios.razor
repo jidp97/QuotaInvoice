@@ -12,18 +12,7 @@
                                   FullWidth="true"
                                   Variant="Variant.Outlined" />
                     <ValidationMessage For="(() => Usuario.Email)" />
-            
-                    <MudTextField Label="Nombre"
-                                  @bind-Value="Usuario.FirtName"
-                                  FullWidth=true
-                                  Variant="Variant.Outlined" />
-                    <ValidationMessage For="(() => Usuario.FirtName)" />
-         
-                    <MudTextField Label="Apellido"
-                                  @bind-Value="Usuario.LastName"
-                                  FullWidth="true"
-                                  Variant="Variant.Outlined" />
-                    <ValidationMessage For="(() => Usuario.LastName)" />
+           
    
     <MudButton Style="float:right;" Class="m-3" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@TextBoton</MudButton>
     <DataAnnotationsValidator />

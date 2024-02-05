@@ -9,13 +9,5 @@ namespace QuotaInvoice.Shared.DTOs
 
         [Required]
         public string? Email { get; set; }
-
-        [Required]
-        public string? FirtName { get; set; }
-
-        [Required]
-        public string? LastName { get; set; }
-
-        public string? Cargo { get; set; }
     }
 }

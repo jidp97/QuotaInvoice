@@ -16,13 +16,12 @@ using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DevelopmentConnection")));
+                        options.UseSqlServer(builder.Configuration.GetConnectionString("DevelopmentConnection")));
 builder.Services.AddDefaultIdentity<ApplicationUser>()
-                    .AddRoles<IdentityRole>()
-                        .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
+                   .AddRoles<IdentityRole>()
+                   .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
                    {
@@ -61,6 +60,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hooligan Api Ecosystem");
+    });
     app.UseDeveloperExceptionPage();
     app.UseWebAssemblyDebugging();
 }
@@ -80,12 +84,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapRazorPages();
-app.MapControllers();
-app.MapHub<ProcesosHub>("/ProcesosHub");
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllers();
     endpoints.MapHub<ProcesosHub>("/ProcesosHub");
     endpoints.MapFallbackToFile("index.html");
 });

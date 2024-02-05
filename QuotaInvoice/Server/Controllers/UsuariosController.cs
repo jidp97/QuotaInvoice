@@ -35,7 +35,7 @@ namespace QuotaInvoice.Server.Controllers
             var queryable = context.Users.AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadAMostrar);
             return await queryable.Paginar(paginacion)
-                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id, FirtName = x.FirstName, LastName = x.LastName }).ToListAsync();
+                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id}).ToListAsync();
         }
 
         [HttpGet("roles")]
@@ -47,10 +47,7 @@ namespace QuotaInvoice.Server.Controllers
                 .Select(x => new UsuarioDTO
                 {
                     Email = x.Email,
-                    UserId = x.Id,
-                    FirtName = x.FirstName,
-                    LastName = x.LastName,
-                    Cargo = x.Cargo
+                    UserId = x.Id
                 })
                 .FirstOrDefaultAsync(x => x.UserId == UserId);
 
@@ -71,15 +68,6 @@ namespace QuotaInvoice.Server.Controllers
                 {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
                 }
-            }
-
-            if (usuario.FirtName != user.FirstName)
-            {
-                user.FirstName = usuario.FirtName;
-            }
-            if (usuario.LastName != user.LastName)
-            {
-                user.LastName = usuario.LastName;
             }
 
             await userManager.UpdateAsync(user);

@@ -10,14 +10,14 @@ namespace QuotaInvoice.Shared.Models
         public static AuthorizationPolicy IsAdminPolicy()
         {
             return new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
-                                                   .RequireRole("Admin")
+                                                   .RequireRole("admin")
                                                    .Build();
         }
 
         public static AuthorizationPolicy IsUserPolicy()
         {
             return new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
-                                                   .RequireRole("User", "Admin")
+                                                   .RequireRole("user", "admin")
                                                    .Build();
         }
     }

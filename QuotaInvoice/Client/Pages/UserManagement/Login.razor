@@ -1,25 +1,42 @@
 ﻿@page "/login"
 @inject IMostrarMensajes mensaje
+@inject IAuthService AuthService
+@inject IJSRuntime JS
+@inject NavigationManager UriHelper
 <MudGrid Justify="Justify.Center">
     <MudItem xs="12" sm="7">
         <MudText Typo="Typo.h4">Iniciar sesión</MudText>
+        <AuthorizeView Policy="@Policies.IsAdmin">
+            <p>eres administrador</p>
+        </AuthorizeView>
+        <AuthorizeView>
+            <p>de hecho ya estas logeado</p>
+        </AuthorizeView>
         <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
             <MudTextField InputType="InputType.Email" InputMode="InputMode.email" Label="Email" @bind-Value="loginModel.Email"></MudTextField>
             <MudTextField InputType="InputType.Password" Label="Password" @bind-Value="loginModel.Password"></MudTextField>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled"ButtonType="ButtonType.Submit">Log in</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Log in</MudButton>
         </EditForm>
     </MudItem>
 </MudGrid>
 
 @code {
     LoginModel loginModel = new();
-    async Task HandleLogin()
+    private async Task HandleLogin()
     {
+        await JS.LoadingAsync();
         var result = await AuthService.Login(loginModel);
-        
+        Console.WriteLine(result);
         if (result.Successful)
         {
+            await JS.RemoveLoadingAsync();
+            await JS.WelcomeAsync();
             UriHelper.NavigateTo("/");
+        }
+        else
+        {
+            await JS.RemoveLoadingAsync();
+            await JS.WarningNotificationAsync("Usuario o contraseña incorrecta, intente otra vez.");
         }
     }
 }
