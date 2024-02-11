@@ -30,8 +30,10 @@
 
 	<ItemGroup>
 	  <None Remove="Properties\" />
+	  <None Remove="Pages\MetroCard\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Properties\" />
+	  <Folder Include="Pages\MetroCard\" />
 	</ItemGroup>
 </Project>
