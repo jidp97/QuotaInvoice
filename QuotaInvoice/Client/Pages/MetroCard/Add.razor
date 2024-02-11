@@ -4,7 +4,26 @@
 
 <ModalDisplay>
     <Content>
-
+           <MetroCardForm TextBoton="Crear tarjeta" OnValidSubmit="AddMetroCard" MetroCard="MetroCard"/>
     </Content>
 </ModalDisplay>
+
+@code{
+    [Parameter] public MetroCard MetroCard { get; set; } = new();
+    [Parameter] public string Id { get; set; }
+    private const string HubName = "ProcesosHub";
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task AddMetroCard()
+    {
+        await methods.ConnectToHub(HubName);
+        if (methods.IsConnected())
+        {
+            await Http.PostAsJsonAsync("api/metrocard", MetroCard);
+            await methods.SendMessageToHub(HubMessagesType.Agregado, HubName);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+
+}
 

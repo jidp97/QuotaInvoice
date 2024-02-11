@@ -1,0 +1,102 @@
+﻿@page "/card/metro"
+@using QuotaInvoice.Client.Helpers
+@inject IJSRuntime JS
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mensaje
+@attribute [Authorize(Policy = Policies.IsAdmin)]
+<AddModalButton Color="Color.Primary" Entidad="MetroCard"
+                Item="MetroCard" Controlador="@controlador" DisableBackdropClick="false" Modal="addView.GetType()"
+                Nombre="Crear tarjeta" Titulo="@("Nueva tarjeta del metro")" Variant="Variant.Text">
+</AddModalButton>
+
+<AuthorizeView Policy="@Policies.IsAdmin">
+<HTable Items="MetroCards" Context="metroCard" HeadersArray="headers" Hover="true" Breakpoint="Breakpoint.Sm">
+    <BodyContent>
+        <MudTd DataLabel="Usuario">@metroCard.UserId</MudTd>
+        <MudTd DataLabel="Acciones">
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert">          
+                <ModifyModalButton Color="Color.Primary" Entidad="usuario" Id="metroCard.UserId"
+                                   Item="metroCard" DisableBackdropClick="false" Modal="modifyView.GetType()"
+                                   Nombre="Modificar" Titulo="@($"Modificando la tarjeta {metroCard.Number}")" Variant="Variant.Text">
+                </ModifyModalButton>
+                <MudMenuItem OnClick="(() => BorrarTarjeta(metroCard.Id))">Borrar tarjeta</MudMenuItem>
+            </MudMenu>
+        </MudTd>
+    </BodyContent>
+</HTable>
+
+<Pagination PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+            PaginasTotales="paginasTotales"></Pagination>
+
+<RealTime CreateMessage="@CreateMessage"
+          UpdateMessage="@UpdateMessage" Hub="@Hub"
+          Area="@Area"
+          Cargar="() => Cargar()">
+</RealTime>
+</AuthorizeView>
+@code {
+    public List<MetroCard> MetroCards { get; set; }
+    public MetroCard MetroCard { get; set; } = new();
+    readonly string[] headers = { "Usuario", "Tarjeta", "Balance", "" };
+    private const string controlador = "metrocard";
+    private readonly Add addView = new();
+    private readonly Modify modifyView = new();
+    private string Area = "MetroCard";
+    private const string Hub = "ProcesosHub";
+    private const string CreateMessage = "Se ha agregado una nueva tarjeta";
+    private const string UpdateMessage = "Se ha actualizado una tarjeta";
+
+
+    private int paginaActual = 1;
+    private int paginasTotales;
+
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar(int pagina = 1)
+    {
+        if (MetroCards == null)
+        {
+            await JS.LoadingAsync();
+        }
+        var response = await httpResponse.Get<List<MetroCard>>($"api/metrocard?pagina={pagina}");
+        if (response.Error)
+        {
+            await mensaje.MostrarMensajeError(await response.GetBody());
+            await JS.RemoveLoadingAsync();
+        }
+        else
+        {
+            paginasTotales = int.Parse(response.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault() ?? "0");
+            MetroCards = response.Response;
+        }
+
+        if (MetroCards?.Count >= 0 && MetroCards != null)
+        {
+            await JS.RemoveLoadingAsync();
+        }
+        if (MetroCards?.Count == 0 || MetroCards == null)
+        {
+            await JS.EmptyDbNotifyAsync();
+        }
+    }
+
+    private async Task BorrarTarjeta(Guid cardId)
+    {
+        var tarjetaSeleccionada = MetroCards.First(x => x.Id == cardId);
+        string mensajeConfirmacion = $"Realmente deseas borrar la tarjeta {tarjetaSeleccionada.Id}?";
+        if (await JS.ConfirmAsync("Confirmar", mensajeConfirmacion, TipoMensajeSweetAlert.question))
+        {
+            await httpResponse.Delete($"api/metrocard/{cardId}");
+            await Cargar();
+        }
+    }
+}

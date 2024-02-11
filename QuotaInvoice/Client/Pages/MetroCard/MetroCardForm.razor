@@ -1,2 +1,55 @@
-﻿@HttpClient http
+﻿@inject HttpClient http
+@using QuotaInvoice.Shared.Entities
+<EditForm Model="MetroCard" OnInvalidSubmit="OnValidSubmit">
+    <CardForms>
+        <Content>
+            <CardGroup>
+                <CardControl>
+                    <MudTextField Label="Numero de tarjeta del metro"
+                                  @bind-Value="MetroCard.Number"
+                                  FullWidth="true"
+                                  T="string"
+                                  Variant="Variant.Outlined"
+                                  HelperText="Escriba el numero de la tarjeta del metro"
+                                  HelperTextOnFocus="true" />
+                    <ValidationMessage For="(() => MetroCard.Number)" />
+                </CardControl>
+            </CardGroup>
+            <CardGroup>
+                <CardControl>
+                    <MudTextField Label="Balance de tarjeta del metro"
+                                  @bind-Value="MetroCard.Balance"
+                                  FullWidth="true"
+                                  T="decimal"
+                                  Variant="Variant.Outlined"
+                                  HelperText="Balance"
+                                  HelperTextOnFocus="true" />
+                    <ValidationMessage For="(() => MetroCard.Balance)" />
+                </CardControl>
+                <CardControl>
+                    <CardGroup>
+                        <MudTextField Label="portador de la tarjeta del metro"
+                                      @bind-Value="MetroCard.UserId"
+                                      FullWidth="true"
+                                      T="String"
+                                      Variant="Variant.Outlined"
+                                      HelperText="Inserte el identificador del portador de la tarjeta"
+                                      HelperTextOnFocus="true" />
+                        <ValidationMessage For="(() => MetroCard.UserId)" />
+                    </CardGroup>
+                </CardControl>
+            </CardGroup>
+        </Content>
+    </CardForms>
+    <MudButton Style="float:right;" Class="m-3" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@TextBoton</MudButton>
+    <DataAnnotationsValidator/>
+</EditForm>
 
+@code{
+    [Parameter] public MetroCard MetroCard { get; set; }
+    [Parameter] public String TextBoton { get; set; } = "Salvar cambios";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    public void Cancel() => MudDialog.Cancel();
+}

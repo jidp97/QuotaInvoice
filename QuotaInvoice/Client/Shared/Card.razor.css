@@ -1,0 +1,32 @@
+﻿/*.card {
+    display: block;
+    text-align: center;
+    border-radius: 8px;
+    border-top-color: white;
+}*/
+
+.card-header {
+    text-align: initial;
+    background-color: white;
+    border-bottom-color: white;
+}
+
+.card-footer {
+    background-color: rgb(255 255 255 / 3%) !important;
+    border-top: 1px solid rgb(255 255 255 / 13%) !important;
+}
+
+/*.card-title {
+    position: absolute;
+    display: flex;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    padding: 0 30px;
+    color: #fff;
+    font-size: 20px;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}*/

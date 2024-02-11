@@ -1,0 +1,23 @@
+﻿::deep label.mdc-text-field.mdc-text-field--fullwidth:not(.mdc-text-field--textarea) > input.mdc-text-field__input {
+    padding: 20px 16px 6px;
+}
+
+::deep .mdc-text-field.mdc-text-field--fullwidth .mdc-floating-label.mdc-floating-label--float-above {
+    font-size: 18px;
+    /* margin-bottom: -17px; */
+    color: #6200ee;
+    /*font-family: 'Quicksand';*/
+    transform: translateY(-106%) scale(0.75);
+    MARGIN-TOP: -5px;
+    font-family: Roboto, sans-serif;
+    letter-spacing: 0.0892857143em;
+    font-weight: 500;
+}
+
+::deep .valid.modified:not([type=checkbox]) {
+    outline: 0px solid #26b050;
+}
+
+::deep .invalid {
+    outline: 0px solid red;
+}

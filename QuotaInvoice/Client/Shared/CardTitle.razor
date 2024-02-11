@@ -1,0 +1,18 @@
+﻿<div class="shadow"></div>
+<div class="card-title justify-content-between">
+    <div>
+        @Title
+    </div>
+    <div>
+        @if (Count > 0)
+        {
+            @Count
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public int Count { get; set; }
+}
